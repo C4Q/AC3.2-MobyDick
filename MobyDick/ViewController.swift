@@ -9,15 +9,22 @@
 import UIKit
 import WebKit
 
-class ViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler {
+class ViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler, WKNavigationDelegate, UITextFieldDelegate {
+    //MARK: - Outlets
+    @IBOutlet weak var textToChangeField: UITextField!
+    @IBOutlet weak var replacementTextField: UITextField!
+    
+    //MARK: - Properties
     var webView: WKWebView!
     let divColors = ["red", "green", "blue", "purple"]
  
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        textToChangeField.delegate = self
+        replacementTextField.delegate = self
+        
         setupWebView()
-    
+        
         let path = Bundle.main.path(forResource: "embedded", ofType: "html")
         let dir = URL(fileURLWithPath: Bundle.main.bundlePath)
         let myURL = URL(fileURLWithPath: path!)
@@ -46,6 +53,7 @@ class ViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler {
         
         webView = WKWebView(frame: .zero, configuration: webConfiguration)
         webView.uiDelegate = self
+        webView.navigationDelegate = self
         
         if let containerView = view.viewWithTag(1) {
             containerView.addSubview(webView)
@@ -64,8 +72,9 @@ class ViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler {
     @IBAction func colorChosen(_ sender: UISegmentedControl) {
         let color = divColors[sender.selectedSegmentIndex]
         
-        var js = "document.getElementById('box').style.backgroundColor = '\(color)';";
-        js += "document.getElementById('box').innerHTML = '\(color)'"
+        let js = "document.body.style.backgroundColor = '\(color)';"
+//        let js = "document.getElementById('body').style.backgroundColor = '\(color)';";
+//        js += "document.getElementById('body').innerHTML = '\(color)'"
         webView.evaluateJavaScript(js) { (ret, error) in
             print(ret ?? "whoops")
         }
@@ -81,4 +90,27 @@ class ViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler {
             print(msg["width"] ?? "No width")
         }
     }
+    
+    //MARK: - Actions
+    @IBAction func rewindButtonPresssed(_ sender: UIBarButtonItem) {
+        self.webView.goBack()
+    }
+    
+    @IBAction func refreshButtonPressed(_ sender: UIBarButtonItem) {
+        let request = URLRequest(url:webView.url!)
+        webView.load(request)
+    }
+
+    @IBAction func replaceButtonPressed(_ sender: UIButton) {
+        if let textToChange = textToChangeField.text,
+            let textToReplaceWith = replacementTextField.text {
+            let js = "document.body.innerHTML = document.body.innerHTML.replace(/\(textToChange)/g, '\(textToReplaceWith)');"
+            webView.evaluateJavaScript(js) { (ret, error) in
+                print(ret ?? "whoops")
+            }
+        }
+
+        //        document.body.innerHTML = document.body.innerHTML.replace(/hello/g, 'hi');
+    }
+    
 }
