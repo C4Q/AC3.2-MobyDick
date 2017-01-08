@@ -9,7 +9,16 @@
 import UIKit
 import WebKit
 
-class ViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler {
+class ViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler, WKNavigationDelegate {
+    
+    
+    @IBOutlet weak var replaceTextField: UITextField!
+    @IBOutlet weak var replacementTextField: UITextField!
+    
+    @IBOutlet weak var backButton: UIBarButtonItem!
+    @IBOutlet weak var reloadButton: UIBarButtonItem!
+    @IBOutlet weak var forwardButton: UIBarButtonItem!
+    
     var webView: WKWebView!
     let divColors = ["red", "green", "blue", "purple"]
  
@@ -17,7 +26,8 @@ class ViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler {
         super.viewDidLoad()
 
         setupWebView()
-    
+        webView.navigationDelegate = self
+        
         let path = Bundle.main.path(forResource: "embedded", ofType: "html")
         let dir = URL(fileURLWithPath: Bundle.main.bundlePath)
         let myURL = URL(fileURLWithPath: path!)
@@ -64,8 +74,8 @@ class ViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler {
     @IBAction func colorChosen(_ sender: UISegmentedControl) {
         let color = divColors[sender.selectedSegmentIndex]
         
-        var js = "document.getElementById('box').style.backgroundColor = '\(color)';";
-        js += "document.getElementById('box').innerHTML = '\(color)'"
+        let js = "document.body.style.background = '\(color)';";
+//        js += "document.getElementById('box').innerHTML = '\(color)'"
         webView.evaluateJavaScript(js) { (ret, error) in
             print(ret ?? "whoops")
         }
@@ -81,4 +91,38 @@ class ViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler {
             print(msg["width"] ?? "No width")
         }
     }
+    
+    
+    @IBAction func replaceButtonPressed(_ sender: UIButton) {
+      
+        guard let textToReplace = replaceTextField.text, textToReplace.characters.count > 0,
+            let replacementText = replacementTextField.text, replacementText.characters.count > 0 else { return }
+        
+        print("Replace \(textToReplace) with \(replacementText)")
+        
+        let js = "document.body.innerHTML = document.body.innerHTML.replace(/\(textToReplace)/g, '\(replacementText)');"
+        webView.evaluateJavaScript(js) { (ret, error) in
+            print(ret ?? "whoops")
+        }
+        
+    }
+    
+    @IBAction func browserButtonPressed(_ sender: UIBarButtonItem) {
+        switch sender {
+        case backButton:
+            webView.goBack()
+        case reloadButton:
+            let request = URLRequest(url: webView.url!)
+            webView.load(request)
+        case forwardButton:
+            webView.goForward()
+        default:
+            break
+        }
+
+        
+    }
+    
+    
+    
 }
