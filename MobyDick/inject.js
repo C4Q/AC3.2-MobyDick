@@ -35,6 +35,16 @@ function postProcess() {
 
     // this is where you should add/change the Javascript you write
     // to post-process pages you load
+    $("p").each(function() {
+                //$(this)
+                $(this).html($(this).html().replace(/driving/ig, '<a href="https://apple.com">🚗</a>'));
+                });
+    
+    $("p").each(function() {
+                //$(this)
+                $(this).html($(this).html().replace(/me/ig, '<img src="https://cdn0.iconfinder.com/data/icons/characters-colored/60/poppey-sailor-man-cartoon-avatar-128.png" border="5" height="25" width="25" />'));
+                });
+
 }
 
 // setting window.onload guarantees the jQuery library will be loaded
