@@ -9,13 +9,17 @@
 import UIKit
 import WebKit
 
-class ViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler {
+class ViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler, WKNavigationDelegate {
     var webView: WKWebView!
     let divColors = ["red", "green", "blue", "purple"]
- 
+
+    @IBOutlet weak var newTextTextField: UITextField!
+    @IBOutlet weak var oldTextTextField: UITextField!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.webView.navigationDelegate = self
         setupWebView()
     
         let path = Bundle.main.path(forResource: "embedded", ofType: "html")
@@ -64,8 +68,8 @@ class ViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler {
     @IBAction func colorChosen(_ sender: UISegmentedControl) {
         let color = divColors[sender.selectedSegmentIndex]
         
-        var js = "document.getElementById('box').style.backgroundColor = '\(color)';";
-        js += "document.getElementById('box').innerHTML = '\(color)'"
+        //http://stackoverflow.com/questions/197748/how-do-i-change-the-background-color-with-javascript
+        let js = "document.body.style.backgroundColor = '\(color)';";
         webView.evaluateJavaScript(js) { (ret, error) in
             print(ret ?? "whoops")
         }
@@ -81,4 +85,18 @@ class ViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler {
             print(msg["width"] ?? "No width")
         }
     }
+    
+    @IBAction func rewindBarButtonTapped(_ sender: UIBarButtonItem) {
+        self.webView.goBack()
+    }
+    @IBAction func reloadBarButtonTapped(_ sender: UIBarButtonItem) {
+        self.webView.reload()
+    }
+    @IBAction func fastForwardBarButtonTapped(_ sender: UIBarButtonItem) {
+        self.webView.goForward()
+    }
+    
+    
+    
+    
 }
