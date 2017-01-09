@@ -9,10 +9,15 @@
 import UIKit
 import WebKit
 
-class ViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler {
+class ViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler, WKNavigationDelegate, UITextFieldDelegate {
     var webView: WKWebView!
     let divColors = ["red", "green", "blue", "purple"]
  
+    @IBOutlet weak var reloadButton: UIBarButtonItem!
+       @IBOutlet weak var backButton: UIBarButtonItem!
+    @IBOutlet weak var wordToReplace: UITextField!
+    @IBOutlet weak var replacementWord: UITextField!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -57,15 +62,40 @@ class ViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler {
         }
     }
     
+    @IBAction func goBack(_ sender: UIBarButtonItem) {
+        webView.goBack()
+    }
+    
+    @IBAction func reload(_ sender: Any) {
+        webView.reload()
+    }
+  
+    
+   //My attempt at swapping out words
+    @IBAction func swapWords(_ sender: UIButton) {
+        let text = "document.body."
+//        var a = "The quick brown fox jumped over the lazy dog.";
+//        
+//        var pattern = /the/ig; // notice "g" here now!
+//        
+//        a.replace( pattern, "THE" )
+//        let js = for(i; i < strLength; i++) {
+//         str = str.replace('\((wordToReplace.text))'
+//         , '\(replacementWord.text))'
+//         }
+//        
+//        webView.evaluateJavaScript(js) { (ret, error) in
+//                print(ret ?? "whoops")
+//        }
+//    }
+    
     // I've taken the div squares out of the HTML document so this segmented control currently does nothing.
     // Repurpose it to change the background color of the document
     //
     // to change the background color of the document
     @IBAction func colorChosen(_ sender: UISegmentedControl) {
         let color = divColors[sender.selectedSegmentIndex]
-        
-        var js = "document.getElementById('box').style.backgroundColor = '\(color)';";
-        js += "document.getElementById('box').innerHTML = '\(color)'"
+        let js = "document.body.style.backgroundColor = '\(color)';";
         webView.evaluateJavaScript(js) { (ret, error) in
             print(ret ?? "whoops")
         }
