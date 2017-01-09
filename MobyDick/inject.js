@@ -13,7 +13,7 @@ function postProcess() {
     // to "Joe".
     $("p").each(function() {
                     //$(this)
-                   $(this).html($(this).html().replace('Ishmael', 'Joe'));
+                   $(this).html($(this).html().replace('Ishmael', 'Blah'));
                    });
 
     
@@ -24,7 +24,10 @@ function postProcess() {
     // ig qualifying the search to i=ignore case and be g=global.
     $("p").each(function() {
                 //$(this)
-                $(this).html($(this).html().replace(/water/ig, '<a href="https://apple.com">fire</a>'));
+                $(this).html($(this).html().replace(/'water'/ig, 'WATERRRRRRRRR'));
+                $(this).html($(this).html().replace('water', '💧'));
+                $(this).html($(this).html().replace('wave', '🌊'));
+                $(this).html($(this).html().replace('soul', '👻'));
                 });
     
     // this is one way you can replace text globally within an HTML page
