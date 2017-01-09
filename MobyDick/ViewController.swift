@@ -9,19 +9,25 @@
 import UIKit
 import WebKit
 
-class ViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler {
+class ViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler, WKNavigationDelegate {
     var webView: WKWebView!
     let divColors = ["red", "green", "blue", "purple"]
- 
+
+    @IBOutlet weak var backButton: UIBarButtonItem!
+    @IBOutlet weak var forwardButton: UIBarButtonItem!
+    @IBOutlet weak var refreshButton: UIBarButtonItem!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         setupWebView()
-    
         let path = Bundle.main.path(forResource: "embedded", ofType: "html")
         let dir = URL(fileURLWithPath: Bundle.main.bundlePath)
         let myURL = URL(fileURLWithPath: path!)
         webView.loadFileURL(myURL, allowingReadAccessTo: dir)
+        webView.navigationDelegate = self
+        
+        
     }
 
     private func setupWebView() {
@@ -57,14 +63,22 @@ class ViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler {
         }
     }
     
-    // I've taken the div squares out of the HTML document so this segmented control currently does nothing.
-    // Repurpose it to change the background color of the document
-    //
-    // to change the background color of the document
+
+    @IBAction func backButton(_ sender: Any) {
+        webView.goBack()
+    }
+    @IBAction func forwardButton(_ sender: Any) {
+        webView.goForward()
+    }
+    
+    @IBAction func refreshButton(_ sender: Any) {
+        webView.reload()
+    }
+    
     @IBAction func colorChosen(_ sender: UISegmentedControl) {
         let color = divColors[sender.selectedSegmentIndex]
         
-        var js = "document.getElementById('box').style.backgroundColor = '\(color)';";
+        var js = "document.getElementById('moby-color').style.backgroundColor = '\(color)';";
         js += "document.getElementById('box').innerHTML = '\(color)'"
         webView.evaluateJavaScript(js) { (ret, error) in
             print(ret ?? "whoops")
