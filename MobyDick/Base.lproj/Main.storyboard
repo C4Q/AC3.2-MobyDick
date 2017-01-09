@@ -59,12 +59,6 @@
                                     </barButtonItem>
                                 </items>
                             </toolbar>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Change" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vGy-qt-SYB">
-                                <rect key="frame" x="23" y="547" width="60" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="to" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4y2-Lc-fet">
                                 <rect key="frame" x="219" y="547" width="16" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -83,10 +77,20 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2mE-jT-cMf">
-                                <rect key="frame" x="161" y="585" width="53" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2mE-jT-cMf">
+                                <rect key="frame" x="195" y="585" width="53" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Change"/>
+                                <connections>
+                                    <action selector="changeWord:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Kho-9N-bpv"/>
+                                </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Change" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vGy-qt-SYB">
+                                <rect key="frame" x="23" y="547" width="60" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -103,8 +107,6 @@
                             <constraint firstItem="yVt-wo-mCp" firstAttribute="top" secondItem="PBL-Pz-XQg" secondAttribute="bottom" constant="39" id="Zh9-Dm-R0k"/>
                             <constraint firstItem="TEB-7D-ttO" firstAttribute="leading" secondItem="4y2-Lc-fet" secondAttribute="trailing" constant="8" id="a8g-cu-T8q"/>
                             <constraint firstItem="yVt-wo-mCp" firstAttribute="leading" secondItem="vGy-qt-SYB" secondAttribute="trailing" constant="24" id="bHt-7G-38c"/>
-                            <constraint firstItem="2mE-jT-cMf" firstAttribute="top" secondItem="yVt-wo-mCp" secondAttribute="bottom" constant="13" id="vAv-Rm-87J"/>
-                            <constraint firstItem="2mE-jT-cMf" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="vd7-ga-hat"/>
                             <constraint firstItem="HSl-aI-12D" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="zq9-IN-eUx"/>
                         </constraints>
                     </view>
@@ -119,7 +121,10 @@
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="backButton" destination="D86-eu-JhI" id="oOF-oi-45W"/>
+                        <outlet property="changeWordButton" destination="2mE-jT-cMf" id="aHV-2Q-Tor"/>
                         <outlet property="forwardButton" destination="i0g-5n-agD" id="pKf-IF-zY7"/>
+                        <outlet property="newWord" destination="TEB-7D-ttO" id="bxG-Le-NBt"/>
+                        <outlet property="oldWord" destination="yVt-wo-mCp" id="aUf-LC-Zen"/>
                         <outlet property="refreshButton" destination="94a-22-bjE" id="4Kf-0p-xjM"/>
                     </connections>
                 </viewController>

@@ -9,13 +9,16 @@
 import UIKit
 import WebKit
 
-class ViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler, WKNavigationDelegate {
+class ViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler, WKNavigationDelegate, UITextFieldDelegate {
     var webView: WKWebView!
     let divColors = ["red", "green", "blue", "purple"]
 
     @IBOutlet weak var backButton: UIBarButtonItem!
     @IBOutlet weak var forwardButton: UIBarButtonItem!
     @IBOutlet weak var refreshButton: UIBarButtonItem!
+    @IBOutlet weak var newWord: UITextField!
+    @IBOutlet weak var oldWord: UITextField!
+    @IBOutlet weak var changeWordButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -82,6 +85,21 @@ class ViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler, WK
         js += "document.getElementById('box').innerHTML = '\(color)'"
         webView.evaluateJavaScript(js) { (ret, error) in
             print(ret ?? "whoops")
+        }
+    }
+    
+    @IBAction func changeWord(_ sender: Any) {
+        print(oldWord.text!)
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        switch textField {
+        case oldWord:
+                print(oldWord.text!)
+        case newWord:
+            print(newWord.text!)
+        default:
+            break
         }
     }
     
