@@ -73,21 +73,30 @@ class ViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler, WK
     
    //My attempt at swapping out words
     @IBAction func swapWords(_ sender: UIButton) {
-        let text = "document.body."
-//        var a = "The quick brown fox jumped over the lazy dog.";
-//        
-//        var pattern = /the/ig; // notice "g" here now!
-//        
-//        a.replace( pattern, "THE" )
-//        let js = for(i; i < strLength; i++) {
-//         str = str.replace('\((wordToReplace.text))'
-//         , '\(replacementWord.text))'
-//         }
-//        
-//        webView.evaluateJavaScript(js) { (ret, error) in
-//                print(ret ?? "whoops")
-//        }
-//    }
+        let textToReplace = wordToReplace.text?.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+        let textToReplaceWith = replacementWord.text?.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+        
+        if textToReplaceWith != "" && textToReplace != ""{
+            
+            print("Replace \(textToReplace) with \(textToReplaceWith)")
+            var js = "document.body.innerHTML = document.body.innerHTML.replace('\(textToReplace!)','\(textToReplaceWith!)');"
+            //js += "document.highlightText();"
+            webView.evaluateJavaScript(js) { (ret, error) in
+                print(error?.localizedDescription)
+                print(ret ?? "whoops")
+            }
+            
+        }else{
+            showAlert()
+        }
+    }
+    func showAlert(){
+        
+        let alert: UIAlertController = UIAlertController(title: "", message: "Textfields cannot be empty", preferredStyle: .alert)
+        let dismiss: UIAlertAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+        alert.addAction(dismiss)
+        present(alert, animated: true, completion: nil)
+    }
     
     // I've taken the div squares out of the HTML document so this segmented control currently does nothing.
     // Repurpose it to change the background color of the document
@@ -111,4 +120,6 @@ class ViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler, WK
             print(msg["width"] ?? "No width")
         }
     }
+
+    
 }
