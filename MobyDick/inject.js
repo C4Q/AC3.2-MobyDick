@@ -31,7 +31,11 @@ function postProcess() {
     // it's a little less safe than the one above because it doesn't limit to a particular
     // set of tags. Be careful not to replace html code!
     // $("body").html($("body").html().replace(/water/ig,'mizu'));
-
+    $("p").each(function() {
+                
+                //$(this)
+               $(this).html($(this).html().replace('city', '<img src="https://cdn4.iconfinder.com/data/icons/free-color-christmas-icons/24/Santa_Claus-48.png" />'));
+                });
 
     // this is where you should add/change the Javascript you write
     // to post-process pages you load

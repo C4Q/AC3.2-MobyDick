@@ -9,15 +9,20 @@
 import UIKit
 import WebKit
 
-class ViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler {
+class ViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler, WKNavigationDelegate {
     var webView: WKWebView!
+    
+    @IBOutlet weak var originalTextField: UITextField!
+    @IBOutlet weak var replacementTextField: UITextField!
+    
     let divColors = ["red", "green", "blue", "purple"]
  
     override func viewDidLoad() {
         super.viewDidLoad()
 
         setupWebView()
-    
+    webView.uiDelegate = self
+        
         let path = Bundle.main.path(forResource: "embedded", ofType: "html")
         let dir = URL(fileURLWithPath: Bundle.main.bundlePath)
         let myURL = URL(fileURLWithPath: path!)
@@ -27,7 +32,6 @@ class ViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler {
     private func setupWebView() {
         let webConfiguration = WKWebViewConfiguration()
         let userContentController = WKUserContentController()
-        
         // Read js to INJECT from a file because there will be quite a bit of it
         let jsPath = Bundle.main.path(forResource: "inject", ofType: "js")
         let myURL = URL(fileURLWithPath: jsPath!)
@@ -64,11 +68,38 @@ class ViewController: UIViewController, WKUIDelegate, WKScriptMessageHandler {
     @IBAction func colorChosen(_ sender: UISegmentedControl) {
         let color = divColors[sender.selectedSegmentIndex]
         
-        var js = "document.getElementById('box').style.backgroundColor = '\(color)';";
-        js += "document.getElementById('box').innerHTML = '\(color)'"
+        let js = "document.getElementById('docBody').style.backgroundColor = '\(color)';";
+       // js += "document.getElementById('docBody').innerHTML = '\(color)'"
         webView.evaluateJavaScript(js) { (ret, error) in
             print(ret ?? "whoops")
         }
+    }
+    
+    
+    @IBAction func replaceButtonTapped(_ sender: UIButton) {
+        
+        if let original = originalTextField.text,
+            let replacement = replacementTextField.text {
+            let js = "document.body.innerHTML = document.body.innerHTML.replace('\(original)','\(replacement)');"
+            webView.evaluateJavaScript(js) { (ret, error) in
+                print(ret ?? "whoops")
+            }
+        }
+        
+    }
+
+    
+    @IBAction func backButtonTapped(_ sender: UIBarButtonItem) {
+        
+        webView.goBack()
+        
+    }
+    
+    @IBAction func reloadButtonTapped(_ sender: UIBarButtonItem) {
+        
+        let request = URLRequest(url: webView.url!)
+        webView.load(request)
+        
     }
     
     // Not using this for this Homework assignment
